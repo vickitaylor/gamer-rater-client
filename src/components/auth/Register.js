@@ -29,6 +29,8 @@ export const Register = () => {
                 .then(res => {
                     if ("token" in res) {
                         localStorage.setItem("gr_token", res.token)
+                        // added current user property
+                        localStorage.setItem("current_user", res.current_user)
                         navigate("/games")
                     }
                 })
