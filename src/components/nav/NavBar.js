@@ -10,11 +10,11 @@ export const NavBar = () => {
                     Games
                 </li>
             </Link>
-            <Link className="navbar__link" to="/categories">
+            {/* <Link className="navbar__link" to="/categories">
                 <li className="navbar__item">
                     Categories
                 </li>
-            </Link>
+            </Link> */}
 
             {
                 (localStorage.getItem("gr_token") !== null) ?

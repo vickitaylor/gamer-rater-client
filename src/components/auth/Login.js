@@ -20,6 +20,8 @@ export const Login = () => {
             .then(res => {
                 if ("valid" in res && res.valid && "token" in res) {
                     localStorage.setItem("gr_token", res.token)
+                    // added current user property
+                    localStorage.setItem("current_user", res.current_user)
                     navigate("/games")
                 }
                 else {
