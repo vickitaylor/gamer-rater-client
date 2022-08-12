@@ -3,7 +3,7 @@ import { getAllGames } from "../../managers/GameManager"
 import { Link, useNavigate } from "react-router-dom";
 
 
-
+// component that renders a list of games in the database.  Per the sever code, the list is sorted alphabetically
 export const GameList = () => {
     const [games, setGames] = useState([])
     const navigate = useNavigate()
