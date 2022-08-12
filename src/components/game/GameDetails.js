@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { getSingleGame, deleteGame } from "../../managers/GameManager"
-import { getRatingsByGame, createRating } from "../../managers/RatingManager";
+import { getPicturesByGame } from "../../managers/PictureManager";
+import { createRating } from "../../managers/RatingManager";
 import { getReviewsByGame } from "../../managers/ReviewManager";
+import "./game.css"
 
 // component that displays the game details and reviews it received. The edit and delete buttons will only appear if the game creator is the user logged in. Also there is a slider scale for users to rate the game 1-10.
 
@@ -12,6 +14,7 @@ export const GameDetails = () => {
 
     const [game, setGame] = useState({})
     const [reviews, setReviews] = useState([])
+    const [pictures, setPictures] = useState([])
 
     // rating state, using 10 so if the slider is not changed 0 does not save
     const [rating, setRating] = useState({
@@ -22,6 +25,9 @@ export const GameDetails = () => {
         getSingleGame(gameId).then(setGame)
             .then(() => {
                 getReviewsByGame(gameId).then(setReviews)
+            })
+            .then(() => {
+                getPicturesByGame(gameId).then(setPictures)
             })
     }, [gameId])
 
@@ -39,6 +45,13 @@ export const GameDetails = () => {
             })
     }
 
+    // address to get pictures stored on the server
+    const getPicture= (pic) => {
+        return <img className="pic" key={`pic--${pic.id}`} src={`http://localhost:8000${pic.action_pic}`} alt={pic.action_pic} />
+    }
+
+
+    
     return (
         <>
             <header>
@@ -90,19 +103,28 @@ export const GameDetails = () => {
                 </fieldset>
 
                 <br />
-                <button onClick={(() => navigate(`/games/${game.id}/review`))}>Review Game</button><br />
-                {/* turnery statement to determine  if the current user logged in is the user who created the game. had to use == as === was returning everything as false.*/}
+                <button onClick={(() => navigate(`/games/${game.id}/review`))}>Review Game</button><br /><br />
+                <button onClick={(() => navigate(`/games/${game.id}/upload`))}>Upload Action Picture</button><br /><br />
 
+                {/* turnery statement to determine  if the current user logged in is the user who created the game. had to use == as === was returning everything as false.*/}
                 {
                     localStorage.getItem("current_user") == game?.player?.user
                         ?
                         <>
-                            <button onClick={(() => navigate(`/games/${game.id}/edit`))}>⚙️</button >
-                            <button onClick={() => { deleteButton(game.id) }}>❌</button><br />
+                            <button onClick={(() => navigate(`/games/${game.id}/edit`))}>⚙️</button ><span> </span>
+                            <button onClick={() => { deleteButton(game.id) }}>❌</button><br /><br />
                         </>
                         : ""
                 }
-                <button onClick={(() => navigate(`/games`))}>Back to Full List</button>
+                <button onClick={(() => navigate(`/games`))}>Back to Full List</button><br /><br />
+
+                <div><span>Pictures:</span><br />
+                    {
+                        pictures.map(pic => {
+                            return getPicture(pic)
+                        })
+                    }
+                </div>
             </article>
         </>
     )
