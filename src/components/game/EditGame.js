@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom"
 import { getAllCategories } from "../../managers/CategoryManager"
 import { editGame, getSingleGame } from "../../managers/GameManager"
 
+// component to edit the game details 
+
 export const EditGame = (props) => {
     const navigate = useNavigate()
     const { gameId } = useParams()
@@ -90,11 +92,11 @@ export const EditGame = (props) => {
                         onChange={changeGameState} />
                 </div>
             </fieldset>
-            {/* cat name does not appear, but some of them have multiple items selected, so that causing issues, since it is a select and not checkboxes*/}
+
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="categories">Category:</label>
-                    <select className="form-control" name="categories" value={game.categories} required onChange={changeGameState}>
+                    <select className="form-control" name="categories" value={game.category} required onChange={changeGameState}>
                         <option value="0">Choose Game Category:</option>
                         {
                             categories.map(cat => {

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { getSingleGame, deleteGame } from "../../managers/GameManager"
+import { getRatingsByGame, createRating } from "../../managers/RatingManager";
 import { getReviewsByGame } from "../../managers/ReviewManager";
 
-// component that displays the game details and reviews it received. The edit button will only appear if the game creator is the user logged in
+// component that displays the game details and reviews it received. The edit and delete buttons will only appear if the game creator is the user logged in. Also there is a slider scale for users to rate the game 1-10.
 
 export const GameDetails = () => {
     const { gameId } = useParams()
@@ -11,6 +12,11 @@ export const GameDetails = () => {
 
     const [game, setGame] = useState({})
     const [reviews, setReviews] = useState([])
+
+    // rating state, using 10 so if the slider is not changed 0 does not save
+    const [rating, setRating] = useState({
+        rating: 10
+    })
 
     useEffect(() => {
         getSingleGame(gameId).then(setGame)
@@ -24,6 +30,13 @@ export const GameDetails = () => {
         deleteGame(id).then(() => {
             navigate(`/games`)
         })
+    }
+
+    const renderPage = () => {
+        getSingleGame(gameId).then(setGame)
+            .then(() => {
+                getReviewsByGame(gameId).then(setReviews)
+            })
     }
 
     return (
@@ -53,7 +66,28 @@ export const GameDetails = () => {
                             return <div key={`review--${review.id}`}>{review.player.user.username} says: {review.review}</div>
                         })
                     }
-                </div>
+                </div><br />
+                <fieldset>
+                    <div>
+                        <div>Current Average Rating:</div>
+                        <div>{game.average_rating}</div><br /><br />
+                        <label htmlFor="rating">What did you think of the game from 1-10:</label><br />
+                        <input type="range" name="rating" min='1' max='10' onChange={(evt) => {
+                            const copy = { ...rating }
+                            copy[evt.target.name] = parseInt(evt.target.value)
+                            setRating(copy)
+                        }}></input>
+                        <button onClick={evt => {
+                            evt.preventDefault()
+                            const postRating = {
+                                rating: rating.rating,
+                                game: gameId
+                            }
+                            createRating(postRating)
+                                .then(() => renderPage())
+                        }}>Save Rating</button>
+                    </div>
+                </fieldset>
 
                 <br />
                 <button onClick={(() => navigate(`/games/${game.id}/review`))}>Review Game</button><br />

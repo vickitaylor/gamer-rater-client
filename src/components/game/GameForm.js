@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { getAllCategories } from "../../managers/CategoryManager"
 import { createGame } from "../../managers/GameManager"
 
-
+// form to create a new game.
 export const GameForm = () => {
     const navigate = useNavigate()
     const [categories, setCategories] = useState([])
