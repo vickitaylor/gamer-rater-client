@@ -7,6 +7,7 @@ import { GameDetails } from "../components/game/GameDetails"
 import { GameForm } from "../components/game/GameForm"
 import { ReviewForm } from "../components/game/ReviewForm"
 import { EditGame } from "../components/game/EditGame"
+import { UploadPic } from "../components/game/UploadPic"
 
 
 export const ApplicationViews = () => {
@@ -20,6 +21,7 @@ export const ApplicationViews = () => {
                 <Route path="/games/create" element={<GameForm />} />
                 <Route path="/games/:gameId/review" element={<ReviewForm />} />
                 <Route path="/games/:gameId/edit" element={<EditGame />} />
+                <Route path="/games/:gameId/upload" element={<UploadPic />} />
             </Route>
         </Routes>
     </>
